@@ -7,6 +7,11 @@ It supports uploading invoice images, extracting key fields, storing them in a d
 
 ------------------------------------------------------------
 
+## 🌐 Live API
+
+Backend is deployed on Render:
+https://invoiceaibackend.onrender.com
+
 🧠 Features
 
 ✅ File Upload
