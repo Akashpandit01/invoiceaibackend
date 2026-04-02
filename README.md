@@ -64,8 +64,8 @@ backend/
 ⚙️ Setup Instructions
 
 1️⃣ Clone Repository
-git clone https://github.com/your-username/your-repo.git
-cd backend
+git clone [https://github.com/your-username/your-repo.git](https://github.com/Akashpandit01/invoiceaibackend/
+cd invoiceaibackend
 
 ------------------------------------------------------------
 
