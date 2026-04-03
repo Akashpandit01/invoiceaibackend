@@ -3,6 +3,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 import shutil, os, re
 
+# ❌ Disabled for Render (requires system dependencies)
+# import pytesseract
+# from PIL import Image
+# from pdf2image import convert_from_path
+
 from dotenv import load_dotenv
 from supabase import create_client
 from passlib.context import CryptContext
@@ -12,19 +17,19 @@ from datetime import datetime, timedelta
 # ================= INIT =================
 load_dotenv()
 
-# ✅ FIXED SUPABASE INIT (SAFE FOR RENDER)
+# ✅ Safe Supabase Initialization (NO CRASH)
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
 if not SUPABASE_URL or not SUPABASE_KEY:
-    print("❌ Missing Supabase environment variables")
+    print("❌ Supabase ENV missing")
     supabase = None
 else:
     try:
         supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
-        print("✅ Supabase connected successfully")
+        print("✅ Supabase connected")
     except Exception as e:
-        print("❌ Supabase connection failed:", e)
+        print("❌ Supabase error:", e)
         supabase = None
 
 SECRET_KEY = "mysecretkey"
@@ -75,10 +80,23 @@ def get_current_user(authorization: str):
 # ================= OCR =================
 def extract_text(path, filename):
     text = ""
+
     try:
-        text = "Invoice Date: 12/05/2024 Amount: 100 Vendor: Demo"
+        # ❌ ORIGINAL OCR DISABLED (Render unsupported)
+        # if filename.lower().endswith(".pdf"):
+        #     pages = convert_from_path(path)
+        #     for p in pages:
+        #         text += pytesseract.image_to_string(p)
+        # else:
+        #     img = Image.open(path).convert("L")
+        #     text = pytesseract.image_to_string(img)
+
+        # ✅ SAFE FALLBACK (keeps logic flow intact)
+        text = ""
+
     except Exception as e:
         print("OCR ERROR:", e)
+
     return text
 
 def extract_data(text):
@@ -109,20 +127,18 @@ def extract_data(text):
 @app.post("/register")
 async def register(user: dict):
     if not supabase:
-        return {"error": "Database not connected"}
+        return {"error": "Database not configured"}
 
     supabase.table("users").insert({
         "email": user["email"],
         "password": hash_password(user["password"])
     }).execute()
-
     return {"message": "Registered"}
-
 
 @app.post("/login")
 async def login(user: dict):
     if not supabase:
-        return {"error": "Database not connected"}
+        return {"error": "Database not configured"}
 
     res = supabase.table("users").select("*").eq("email", user["email"]).execute()
 
@@ -137,7 +153,6 @@ async def login(user: dict):
     token = create_token({"email": user["email"]})
     return {"access_token": token}
 
-
 @app.get("/invoices")
 def get_invoices(authorization: str = Header(None)):
     if not supabase:
@@ -150,11 +165,10 @@ def get_invoices(authorization: str = Header(None)):
     res = supabase.table("invoices").select("*").eq("user_email", user).execute()
     return res.data
 
-
 @app.post("/upload")
 async def upload(file: UploadFile = File(...), authorization: str = Header(None)):
     if not supabase:
-        return {"error": "Database not connected"}
+        return {"error": "Database not configured"}
 
     user = get_current_user(authorization)
     if not user:
@@ -177,7 +191,6 @@ async def upload(file: UploadFile = File(...), authorization: str = Header(None)
 
     return {"message": "Uploaded"}
 
-
 @app.get("/analytics")
 def analytics(authorization: str = Header(None)):
     if not supabase:
@@ -195,11 +208,10 @@ def analytics(authorization: str = Header(None)):
         "total_spend": sum(float(i["total_amount"]) for i in data)
     }
 
-
 @app.delete("/invoice/{id}")
 def delete(id: int, authorization: str = Header(None)):
     if not supabase:
-        return {"error": "Database not connected"}
+        return {"error": "Database not configured"}
 
     supabase.table("invoices").delete().eq("id", id).execute()
     return {"message": "Deleted"}
