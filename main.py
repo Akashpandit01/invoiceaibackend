@@ -2,9 +2,9 @@ from fastapi import FastAPI, File, UploadFile, Header
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 import shutil, os, re
-# import pytesseract
-# from PIL import Image
-# from pdf2image import convert_from_path
+import pytesseract
+from PIL import Image
+from pdf2image import convert_from_path
 from dotenv import load_dotenv
 from supabase import create_client
 from passlib.context import CryptContext
@@ -62,10 +62,8 @@ def get_current_user(authorization: str):
         return None
 
 # ================= OCR =================
-# def extract_text(path, filename):
-#     text = ""
 def extract_text(path, filename):
-    return "Invoice Date: 12/05/2024 Amount: 100"
+    text = ""
 
     try:
         if filename.lower().endswith(".pdf"):
