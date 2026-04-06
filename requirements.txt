@@ -1,8 +1,9 @@
 fastapi
-uvicorn
+uvicorn[standard]
 sqlalchemy
 passlib[bcrypt]
-supabase==2.3.4
+supabase>=2.4.0
 python-multipart
 python-dotenv
 python-jose
+httpx==0.27.0
