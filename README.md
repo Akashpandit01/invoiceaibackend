@@ -1,145 +1,123 @@
-📄 Invoice Extraction AI – Backend
+INVOICE AI - BACKEND
 
-🚀 Overview
-This backend service is built using FastAPI to process invoice documents, extract structured data using OCR, and store results in Supabase.
+Description:
+This is a FastAPI backend application for processing invoices using OCR, storing data in Supabase, and providing analytics.
 
-It supports uploading invoice images, extracting key fields, storing them in a database, and providing analytics insights.
+--------------------------------------------------
 
-------------------------------------------------------------
+Features:
+- JWT Authentication (Login/Register)
+- File upload (JPG, PNG, PDF)
+- OCR using Tesseract
+- Invoice data extraction
+- Supabase database integration
+- Analytics API
+- Static file serving (image preview)
 
-## 🌐 Live API
+--------------------------------------------------
 
-Backend is deployed on Render:
-https://invoiceaibackend.onrender.com
+Technologies Used:
+- FastAPI (Python)
+- Supabase (Database)
+- Tesseract OCR
+- pdf2image
+- JWT (python-jose)
+- Passlib (bcrypt)
 
-🧠 Features
+--------------------------------------------------
 
-✅ File Upload
-- Upload invoice images (JPG, PNG)
-- Stores files in Supabase Storage
-
-✅ OCR Processing
-- Uses Tesseract OCR
-- Extracts raw text from invoice images
-
-✅ Data Extraction
-- Parses extracted text into structured JSON:
-  - Vendor Name
-  - Invoice Date
-  - Total Amount
-  - Currency
-
-✅ Format Detection
-- Detects known invoice formats based on vendor
-- Reuses parsing logic for better performance
-
-✅ Duplicate Detection
-- Prevents duplicate invoices using:
-  - Vendor
-  - Amount
-  - Date
-
-✅ Analytics API
-- Total invoices count
-- Total spend
-- Vendor-wise spend
-- Monthly spend trends
-
-------------------------------------------------------------
-
-🛠️ Tech Stack
-
-- Backend Framework: FastAPI
-- OCR Engine: Tesseract
-- Database & Storage: Supabase
-- Language: Python
-
-------------------------------------------------------------
-
-📂 Project Structure
+Project Structure:
 
 backend/
-│── main.py
-│── requirements.txt
-│── uploads/
-│── .env
+  main.py
+  uploads/
+  .env
+  requirements.txt
 
-------------------------------------------------------------
+--------------------------------------------------
 
-⚙️ Setup Instructions
+Setup Instructions:
 
-1️⃣ Clone Repository
-git clone [https://github.com/your-username/your-repo.git](https://github.com/Akashpandit01/invoiceaibackend/
-cd invoiceaibackend
+1. Clone the repository:
+   git clone <repo-link>
 
-------------------------------------------------------------
+2. Navigate to backend folder:
+   cd backend
 
-2️⃣ Install Dependencies
-pip install -r requirements.txt
+3. Create virtual environment:
+   python -m venv venv
+   venv\Scripts\activate
 
-------------------------------------------------------------
+4. Install dependencies:
+   pip install -r requirements.txt
 
-3️⃣ Setup Environment Variables
+5. Create .env file:
+   SUPABASE_URL=your_url
+   SUPABASE_KEY=your_key
 
-Create a .env file:
+6. Run server:
+   uvicorn main:app --reload
 
-SUPABASE_URL=your_supabase_url
-SUPABASE_KEY=your_supabase_key
+--------------------------------------------------
 
-------------------------------------------------------------
+API Endpoints:
 
-4️⃣ Run Server
-uvicorn main:app --reload
+Authentication:
+POST /register
+POST /login
 
-------------------------------------------------------------
-
-5️⃣ API Docs
-http://127.0.0.1:8000/docs
-
-------------------------------------------------------------
-
-📡 API Endpoints
-
-🔹 Upload Invoice
-POST /upload
-
-🔹 Get All Invoices
+Invoices:
 GET /invoices
-
-🔹 Delete Invoice
+POST /upload
 DELETE /invoice/{id}
 
-🔹 Analytics
+Analytics:
 GET /analytics
 
-------------------------------------------------------------
+--------------------------------------------------
 
-⚠️ Limitations
+Authentication:
 
-- Currently supports only JPG/PNG images
-- PDF support can be added using pdf2image
-- Parsing is rule-based (regex), not LLM-based
-- No user authentication implemented
+All protected routes require JWT token:
 
-------------------------------------------------------------
+Authorization: Bearer <token>
 
-🚀 Future Improvements
+--------------------------------------------------
 
-- Integrate LLM (OpenAI/Gemini) for better parsing
-- Add PDF support
-- Improve format detection using ML
-- Add user authentication
-- Add confidence scoring
+File Upload Support:
 
-------------------------------------------------------------
+- JPG
+- PNG
+- PDF
 
-🌐 Deployment
+--------------------------------------------------
 
-- Backend deployed on Render
-- Accessible via public API URL
+OCR Flow:
 
-------------------------------------------------------------
+1. Upload file
+2. Extract text using Tesseract
+3. Parse invoice data
+4. Store in database
+5. Return response
 
-🎯 Conclusion
+--------------------------------------------------
 
-This backend demonstrates a scalable architecture for invoice processing using OCR and structured data extraction, with scope for AI enhancement using LLMs.
+Requirements:
+
+- Python 3.9+
+- Tesseract OCR installed
+- Poppler installed (for PDF)
+
+--------------------------------------------------
+
+Future Enhancements:
+
+- AI-based invoice parsing
+- Multi-language OCR
+- Cloud storage integration
+- Role-based authentication
+
+--------------------------------------------------
+
+Author:
+Akash Pandit
